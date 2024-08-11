@@ -1,6 +1,7 @@
 package com.gyzjc.subject.domain.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.subject.domain.convert.SubjectCategoryConverter;
 import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
@@ -25,15 +26,15 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
             log.info("SubjectCategoryController.add.bo:{}", JSON.toJSONString(subjectCategoryBO));
         }
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectCategoryService.insert(subjectCategory);
     }
 
     @Override
     public List<SubjectCategoryBO> queryCategory(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
-
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         List<SubjectCategory> subjectCategoryList =  subjectCategoryService.queryCategory(subjectCategory);
-
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE
                 .convertBoToCategory(subjectCategoryList);
 
@@ -43,6 +44,21 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         }
 
         return boList;
+    }
+
+    @Override
+    public Boolean update(SubjectCategoryBO subjectCategoryBO) {
+        SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        int count = subjectCategoryService.update(subjectCategory);
+        return count > 0;
+    }
+
+    @Override
+    public Boolean delete(SubjectCategoryBO subjectCategoryBO) {
+        SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
+        int count = subjectCategoryService.update(subjectCategory);
+        return count > 0;
     }
 
 

@@ -17,9 +17,4 @@ public class SubjectController {
 
     @Autowired
     private SubjectCategoryDao subjectCategoryDao;
-    @GetMapping("/test")
-    public String test() {
-        SubjectCategory subjectCategory = subjectCategoryDao.queryById(1L);
-        return subjectCategory.getCategoryName();
-    }
 }
