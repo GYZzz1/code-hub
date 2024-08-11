@@ -1,0 +1,5 @@
+com\gyzjc\subject\domain\entity\SubjectCategoryBO.class
+com\gyzjc\subject\domain\service\SubjectCategoryDomainService.class
+com\gyzjc\subject\domain\convert\SubjectCategoryConverter.class
+com\gyzjc\subject\domain\convert\SubjectCategoryConverterImpl.class
+com\gyzjc\subject\domain\service\impl\SubjectCategoryDomainServiceImpl.class
