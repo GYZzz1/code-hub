@@ -1,11 +1,13 @@
 package com.gyzjc.subject.domain.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.gyzjc.subject.common.entity.PageResult;
 import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.subject.domain.convert.SubjectCategoryConverter;
 import com.gyzjc.subject.domain.convert.SubjectInfoConverter;
 import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
+import com.gyzjc.subject.domain.entity.SubjectOptionBO;
 import com.gyzjc.subject.domain.handler.subject.SubjectTypeHandler;
 import com.gyzjc.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,16 +39,18 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     private SubjectTypeHandlerFactory subjectTypeHandlerFactory;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Boolean add(SubjectInfoBO subjectInfoBO) {
         if (log.isInfoEnabled()) {
             log.info("SubjectInfoDomainServiceImpl.add.bo:{}", JSON.toJSONString(subjectInfoBO));
         }
 
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToInfo(subjectInfoBO);
+        subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectInfoService.insert(subjectInfo);
         // 工厂+策略
         SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
+        subjectInfoBO.setId(subjectInfo.getId());
         handler.add(subjectInfoBO);
 
         List<Integer> categoryIds = subjectInfoBO.getCategoryIds();
@@ -57,12 +62,51 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
                 subjectMapping.setSubjectId(subjectInfo.getId());
                 subjectMapping.setCategoryId(Long.valueOf(categoryId));
                 subjectMapping.setLabelId(Long.valueOf(labelId));
+                subjectMapping.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+
                 subjectMappingList.add(subjectMapping);
             });
         });
         subjectMappingService.batchInsert(subjectMappingList);
 
         return true;
+    }
+
+    @Override
+    public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO subjectInfoBO) {
+        PageResult<SubjectInfoBO> pageResult = new PageResult<>();
+        pageResult.setPageNo(subjectInfoBO.getPageNo());
+        pageResult.setPageSize(subjectInfoBO.getPageSize());
+        int start = (subjectInfoBO.getPageNo() - 1) * subjectInfoBO.getPageSize();
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToInfo(subjectInfoBO);
+        int count = subjectInfoService.countByCondition(subjectInfo, subjectInfoBO.getCategoryId(),
+                subjectInfoBO.getLabelId());
+
+        if (count == 0) {
+            return pageResult;
+        }
+
+        List<SubjectInfo> subjectInfoList = subjectInfoService.queryPage(subjectInfo, subjectInfoBO.getCategoryId(),
+                subjectInfoBO.getLabelId(), start, subjectInfoBO.getPageSize());
+        List<SubjectInfoBO> subjectInfoBOS = SubjectInfoConverter.INSTANCE.convertBoToCategory(subjectInfoList);
+
+        pageResult.setRecords(subjectInfoBOS);
+        pageResult.setTotal(count);
+        return pageResult;
+    }
+
+    @Override
+    public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
+        // SubjectInfo subjectInfo = subjectInfoService.queryById(subjectInfoBO.getId());
+        // Integer subjectType = subjectInfo.getSubjectType();
+        // SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
+        // SubjectOptionBO optionBO = handler.query(subjectInfo.getId().intValue());
+        // SubjectInfoBO bo = SubjectInfoConverter.INSTANCE.convertOptionAndInfoToBO(optionBO, subjectInfo);
+        // List<String> labelNameList = new ArrayList<>();
+        // bo.setLabelName(labelNameList);
+        //
+        // return bo;
+        return null;
     }
 
 }

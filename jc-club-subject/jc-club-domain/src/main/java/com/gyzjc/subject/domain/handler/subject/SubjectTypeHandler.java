@@ -2,6 +2,7 @@ package com.gyzjc.subject.domain.handler.subject;
 
 import com.gyzjc.subject.common.enums.SubjectInfoTypeEnum;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
+import com.gyzjc.subject.domain.entity.SubjectOptionBO;
 
 public interface SubjectTypeHandler {
 
@@ -16,4 +17,10 @@ public interface SubjectTypeHandler {
      * @param subjectInfoBO
      */
     void add(SubjectInfoBO subjectInfoBO);
+
+    /**
+     * 查询
+     * @param subjectId
+     */
+    SubjectOptionBO query(int subjectId);
 }

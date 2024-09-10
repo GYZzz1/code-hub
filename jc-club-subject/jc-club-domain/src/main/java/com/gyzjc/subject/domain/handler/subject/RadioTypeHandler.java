@@ -1,9 +1,11 @@
 package com.gyzjc.subject.domain.handler.subject;
 
 import com.google.common.base.Preconditions;
+import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.subject.common.enums.SubjectInfoTypeEnum;
 import com.gyzjc.subject.domain.convert.RadioSubjectConverter;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
+import com.gyzjc.subject.domain.entity.SubjectOptionBO;
 import com.gyzjc.subject.infra.basic.entity.SubjectRadio;
 import com.gyzjc.subject.infra.basic.service.SubjectRadioService;
 import org.springframework.stereotype.Component;
@@ -35,9 +37,15 @@ public class RadioTypeHandler implements SubjectTypeHandler {
         subjectInfoBO.getOptionList().forEach(option -> {
             SubjectRadio subjectRadio = RadioSubjectConverter.INSTANCE.convertBoToEntity(option);
             subjectRadio.setSubjectId(subjectInfoBO.getId());
+            subjectRadio.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
             subjectRadioList.add(subjectRadio);
         });
 
         subjectRadioService.batchInsert(subjectRadioList);
+    }
+
+    @Override
+    public SubjectOptionBO query(int subjectId) {
+        return null;
     }
 }

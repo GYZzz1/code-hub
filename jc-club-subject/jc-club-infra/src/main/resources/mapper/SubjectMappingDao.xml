@@ -175,7 +175,7 @@
         is_deleted)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.subjectId}#{entity.categoryId}#{entity.labelId}#{entity.createdBy}#{entity.createdTime}#{entity.updateBy}#{entity.updateTime}#{entity.isDeleted})
+        (#{entity.subjectId}, #{entity.categoryId}, #{entity.labelId}, #{entity.createdBy}, #{entity.createdTime}, #{entity.updateBy}, #{entity.updateTime}, #{entity.isDeleted})
         </foreach>
     </insert>
 
@@ -190,7 +190,7 @@
         is_deleted)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.subjectId}#{entity.categoryId}#{entity.labelId}#{entity.createdBy}#{entity.createdTime}#{entity.updateBy}#{entity.updateTime}#{entity.isDeleted})
+            (#{entity.subjectId}, #{entity.categoryId}, #{entity.labelId}, #{entity.createdBy}, #{entity.createdTime}, #{entity.updateBy}, #{entity.updateTime}, #{entity.isDeleted})
         </foreach>
         on duplicate key update
         subject_id = values(subject_id)category_id = values(category_id)label_id = values(label_id)created_by =

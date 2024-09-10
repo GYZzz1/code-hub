@@ -2,6 +2,8 @@ package com.gyzjc.subject.infra.basic.service;
 
 import com.gyzjc.subject.infra.basic.entity.SubjectInfo;
 
+import java.util.List;
+
 /**
  * 题目信息表(SubjectInfo)表服务接口
  *
@@ -42,4 +44,7 @@ public interface SubjectInfoService {
      */
     boolean deleteById(Long id);
 
+    int countByCondition(SubjectInfo subjectInfo, Integer categoryId, Long labelId);
+
+    List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Integer categoryId, Long labelId, int start, Integer pageSize);
 }
