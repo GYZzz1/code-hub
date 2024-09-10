@@ -11,6 +11,7 @@ import com.gyzjc.subject.common.entity.Result;
 import com.gyzjc.subject.domain.entity.SubjectAnswerBO;
 import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
+import com.gyzjc.subject.domain.service.SubjectInfoDomainService;
 import com.gyzjc.subject.infra.basic.dao.SubjectCategoryDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ import java.util.List;
 public class SubjectController {
 
     @Autowired
-    private SubjectCategoryDao subjectCategoryDao;
+    private SubjectInfoDomainService subjectInfoDomainService;
 
 
     @PostMapping("/add")
@@ -55,10 +56,10 @@ public class SubjectController {
             List<SubjectAnswerBO> subjectAnswerBOS = SubjectAnswerDTOConverter.INSTANCE.convertDTOListToBOList(subjectInfoDTO.getOptionList());
             subjectInfoBO.setOptionList(subjectAnswerBOS);
 
-            subjectCategoryDomainService.add(subjectInfoBO);
+            subjectInfoDomainService.add(subjectInfoBO);
             return Result.ok(true);
         } catch (Exception e) {
-            log.error("SubjectCategoryController.add.error:{}", e.getMessage(), e);
+            log.error("SubjectController.add.error:{}", e.getMessage(), e);
             return Result.fail(e.getMessage());
         }
     }
