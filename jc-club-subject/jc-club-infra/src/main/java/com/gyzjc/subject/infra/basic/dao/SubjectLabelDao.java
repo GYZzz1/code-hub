@@ -69,5 +69,11 @@ public interface SubjectLabelDao {
      */
     int deleteById(Long id);
 
+    /**
+     * idList批量查询
+     * @param labelIdList
+     * @return
+     */
+    List<SubjectLabel> batchQueryById(List<Long> labelIdList);
 }
 

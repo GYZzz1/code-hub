@@ -6,6 +6,7 @@ import com.gyzjc.subject.infra.basic.service.SubjectMappingService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 题目分类关系表(SubjectMapping)表服务实现类
@@ -61,5 +62,10 @@ public class SubjectMappingServiceImpl implements SubjectMappingService {
     @Override
     public boolean deleteById(Long id) {
         return this.subjectMappingDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<SubjectMapping> queryByLabelId(SubjectMapping subjectMapping) {
+        return this.subjectMappingDao.queryDistinctLabelId(subjectMapping);
     }
 }

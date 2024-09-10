@@ -27,6 +27,13 @@ public interface SubjectLabelDomainService {
      */
     Boolean delete(SubjectLabelBO subjectLabelBO);
 
+    /**
+     * 查询分类下标签
+     * @param subjectLabelBO
+     * @return
+     */
+    List<SubjectLabelBO> queryLabelByCategoryId(SubjectLabelBO subjectLabelBO);
+
     // /**
     //  * 查询岗位大类
     //  * @return

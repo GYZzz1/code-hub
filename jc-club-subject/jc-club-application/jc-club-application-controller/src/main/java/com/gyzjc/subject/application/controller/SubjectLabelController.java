@@ -2,18 +2,17 @@ package com.gyzjc.subject.application.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
-import com.gyzjc.subject.application.convert.SubjectCategoryDTOConverter;
 import com.gyzjc.subject.application.convert.SubjectLabelDTOConverter;
-import com.gyzjc.subject.application.dto.SubjectCategoryDTO;
 import com.gyzjc.subject.application.dto.SubjectLabelDTO;
 import com.gyzjc.subject.common.entity.Result;
-import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.entity.SubjectLabelBO;
-import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
 import com.gyzjc.subject.domain.service.SubjectLabelDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -62,7 +61,7 @@ public class SubjectLabelController {
     @PostMapping("/update")
     public Result<Boolean> update(@RequestBody SubjectLabelDTO subjectLabelDTO) {
         if (log.isInfoEnabled()) {
-            log.info("SubjectLabelController.update.dto: {}", subjectLabelDTO);
+            log.info("SubjectLabelController.update.dto: {}", JSON.toJSONString(subjectLabelDTO));
         }
         Preconditions.checkNotNull(subjectLabelDTO.getId(), "标签id不能为空");
         SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToLabelBO(subjectLabelDTO);
@@ -80,10 +79,10 @@ public class SubjectLabelController {
      * @param subjectLabelDTO
      * @return
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public Result<Boolean> delete(@RequestBody SubjectLabelDTO subjectLabelDTO) {
         if (log.isInfoEnabled()) {
-            log.info("SubjectLabelController.delete.dto: {}", subjectLabelDTO);
+            log.info("SubjectLabelController.delete.dto: {}", JSON.toJSONString(subjectLabelDTO));
         }
         SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToLabelBO(subjectLabelDTO);
         try {
@@ -95,76 +94,20 @@ public class SubjectLabelController {
         }
     }
 
-    // @PostMapping("/queryPrimaryCategory")
-    // public Result<List<SubjectCategoryDTO>> queryPrimaryCategory(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
-    //     try {
-    //         SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToCategoryBO(subjectCategoryDTO);
-    //         // List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategory(subjectCategoryBO);
-    //         List<SubjectCategoryDTO> subjectCategoryDTOList = SubjectCategoryDTOConverter.INSTANCE.
-    //                 convertBoListToCategoryDtoList(subjectCategoryBOList);
-    //         return Result.ok(subjectCategoryDTOList);
-    //     } catch (Exception e) {
-    //         log.error("SubjectCategoryController.queryPrimaryCategory.error:{}", e.getMessage(), e);
-    //         return Result.fail("查询失败");
-    //     }
-    // }
-    //
-    // @PostMapping("/queryCategoryByPrimary")
-    // public Result<List<SubjectCategoryDTO>> queryCategoryByPrimary(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
-    //     if (log.isInfoEnabled()) {
-    //         log.info("SubjectCategoryController.queryPrimaryCategory.dto: {}", subjectCategoryDTO);
-    //     }
-    //
-    //     Preconditions.checkNotNull(subjectCategoryDTO.getParentId(), "分類id不爲空");
-    //     SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToCategoryBO(subjectCategoryDTO);
-    //     try {
-    //         List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategory(subjectCategoryBO);
-    //         List<SubjectCategoryDTO> subjectCategoryDTOList = SubjectCategoryDTOConverter.INSTANCE.
-    //                 convertBoListToCategoryDtoList(subjectCategoryBOList);
-    //         return Result.ok(subjectCategoryDTOList);
-    //     } catch (Exception e) {
-    //         log.error("SubjectCategoryController.queryPrimaryCategory.error:{}", e.getMessage(), e);
-    //         return Result.fail("查询失败");
-    //     }
-    // }
-    //
-    // /**
-    //  * 更新分类
-    //  *
-    //  * @return
-    //  */
-    // @PostMapping("/update")
-    // public Result<Boolean> update(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
-    //     if (log.isInfoEnabled()) {
-    //         log.info("SubjectCategoryController.update.dto: {}", subjectCategoryDTO);
-    //     }
-    //     SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToCategoryBO(subjectCategoryDTO);
-    //     try {
-    //         Boolean result = subjectCategoryDomainService.update(subjectCategoryBO);
-    //         return Result.ok(result);
-    //     } catch (Exception e) {
-    //         log.error("SubjectCategoryController.queryPrimaryCategory.error:{}", e.getMessage(), e);
-    //         return Result.fail("更新分类失败");
-    //     }
-    // }
-    //
-    // /**
-    //  * 删除分类
-    //  * @param subjectCategoryDTO
-    //  * @return
-    //  */
-    // @DeleteMapping("/delete")
-    // public Result<Boolean> delete(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
-    //     if (log.isInfoEnabled()) {
-    //         log.info("SubjectCategoryController.update.dto: {}", subjectCategoryDTO);
-    //     }
-    //     SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToCategoryBO(subjectCategoryDTO);
-    //     try {
-    //         Boolean result = subjectCategoryDomainService.delete(subjectCategoryBO);
-    //         return Result.ok(result);
-    //     } catch (Exception e) {
-    //         log.error("SubjectCategoryController.queryPrimaryCategory.error:{}", e.getMessage(), e);
-    //         return Result.fail("删除分类失败");
-    //     }
-    // }
+    @PostMapping("/queryLabelByCategoryId")
+    public Result<List<SubjectLabelDTO>> queryLabelByCategoryId(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectLabelController.queryLabelByCategoryId.dto: {}", JSON.toJSONString(subjectLabelDTO));
+            }
+            Preconditions.checkNotNull(subjectLabelDTO.getCategoryId(), "分类id不能为空");
+            SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToLabelBO(subjectLabelDTO);
+            List<SubjectLabelBO> resultList = subjectLabelDomainService.queryLabelByCategoryId(subjectLabelBO);
+            List<SubjectLabelDTO> result = SubjectLabelDTOConverter.INSTANCE.convertBOToLabelDTOList(resultList);
+            return Result.ok(result);
+        } catch (Exception e) {
+            log.error("SubjectLabelController.queryLabelByCategoryId.error:{}", e.getMessage(), e);
+            return Result.fail("查询分类下标签失败");
+        }
+    }
 }

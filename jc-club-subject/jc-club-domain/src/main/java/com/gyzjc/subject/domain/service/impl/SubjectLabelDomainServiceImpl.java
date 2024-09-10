@@ -2,17 +2,22 @@ package com.gyzjc.subject.domain.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
-import com.gyzjc.subject.domain.convert.SubjectCategoryConverter;
 import com.gyzjc.subject.domain.convert.SubjectLabelConverter;
 import com.gyzjc.subject.domain.entity.SubjectLabelBO;
 import com.gyzjc.subject.domain.service.SubjectLabelDomainService;
-import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
+import com.gyzjc.subject.infra.basic.entity.SubjectMapping;
 import com.gyzjc.subject.infra.basic.service.SubjectLabelService;
+import com.gyzjc.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,6 +25,8 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
 
     @Resource
     private SubjectLabelService subjectLabelService;
+    @Resource
+    private SubjectMappingService subjectMappingService;
 
     @Override
     public Boolean add(SubjectLabelBO subjectLabelBO) {
@@ -48,6 +55,30 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
         subjectLabel.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
         int count = subjectLabelService.update(subjectLabel);
         return count > 0;
+    }
+
+    @Override
+    public List<SubjectLabelBO> queryLabelByCategoryId(SubjectLabelBO subjectLabelBO) {
+        Long categoryId = subjectLabelBO.getCategoryId();
+        SubjectMapping subjectMapping = new SubjectMapping();
+        subjectMapping.setCategoryId(categoryId);
+        subjectMapping.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        List<SubjectMapping> mappingList = subjectMappingService.queryByLabelId(subjectMapping);
+        if (CollectionUtils.isEmpty(mappingList)) {
+            return Collections.emptyList();
+        }
+        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        List<SubjectLabel> labelList = subjectLabelService.batchQueryById(labelIdList);
+        List<SubjectLabelBO> boList = new ArrayList<>();
+        labelList.forEach(lablel -> {
+            SubjectLabelBO bo = new SubjectLabelBO();
+            bo.setCategoryId(lablel.getId());
+            bo.setLabelName(lablel.getLabelName());
+            bo.setCategoryId(categoryId);
+            bo.setSortNum(lablel.getSortNum());
+            boList.add(bo);
+        });
+        return boList;
     }
 
 

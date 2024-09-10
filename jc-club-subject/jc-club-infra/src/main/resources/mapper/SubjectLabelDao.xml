@@ -124,7 +124,6 @@
         is_deleted = values(is_deleted)
     </insert>
 
-
     <!--通过主键修改数据-->
     <update id="update">
         update subject_label
@@ -156,6 +155,16 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="batchQueryById" resultMap="SubjectLabelMap">
+        select
+            *
+        from subject_label
+        where id in
+        <foreach collection="labelIdList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
 
     <!--通过主键删除-->
     <delete id="deleteById">
