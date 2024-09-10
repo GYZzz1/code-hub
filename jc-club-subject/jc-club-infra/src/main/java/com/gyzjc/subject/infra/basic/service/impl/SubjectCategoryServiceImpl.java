@@ -2,7 +2,7 @@ package com.gyzjc.subject.infra.basic.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
-import com.gyzjc.subject.infra.basic.mapper.SubjectCategoryDao;
+import com.gyzjc.subject.infra.basic.dao.SubjectCategoryDao;
 import com.gyzjc.subject.infra.basic.service.SubjectCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

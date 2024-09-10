@@ -4,29 +4,29 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
- * 题目标签表(SubjectLabel)实体类
+ * 题目分类关系表(SubjectMapping)实体类
  *
  * @author makejava
- * @since 2024-08-11 22:05:06
+ * @since 2024-08-11 22:51:27
  */
-public class SubjectLabel implements Serializable {
-    private static final long serialVersionUID = 160897300017982280L;
+public class SubjectMapping implements Serializable {
+    private static final long serialVersionUID = 999766445326642985L;
 /**
      * 主键
      */
     private Long id;
 /**
-     * 标签分类
+     * 题目id
      */
-    private String labelName;
+    private Long subjectId;
 /**
      * 分类id
      */
     private Long categoryId;
 /**
-     * 排序
+     * 标签id
      */
-    private Integer sortNum;
+    private Long labelId;
 /**
      * 创建人
      */
@@ -36,11 +36,11 @@ public class SubjectLabel implements Serializable {
      */
     private Date createdTime;
 /**
-     * 更新人
+     * 修改人
      */
     private String updateBy;
 /**
-     * 更新时间
+     * 修改时间
      */
     private Date updateTime;
 
@@ -55,12 +55,12 @@ public class SubjectLabel implements Serializable {
         this.id = id;
     }
 
-    public String getLabelName() {
-        return labelName;
+    public Long getSubjectId() {
+        return subjectId;
     }
 
-    public void setLabelName(String labelName) {
-        this.labelName = labelName;
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
     }
 
     public Long getCategoryId() {
@@ -71,12 +71,12 @@ public class SubjectLabel implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Integer getSortNum() {
-        return sortNum;
+    public Long getLabelId() {
+        return labelId;
     }
 
-    public void setSortNum(Integer sortNum) {
-        this.sortNum = sortNum;
+    public void setLabelId(Long labelId) {
+        this.labelId = labelId;
     }
 
     public String getCreatedBy() {

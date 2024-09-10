@@ -50,7 +50,48 @@ public class SubjectLabelController {
             return Result.ok(result);
         } catch (Exception e) {
             log.error("SubjectLabelController.add.error:{}", e.getMessage(), e);
-            return Result.fail(e.getMessage());
+            return Result.fail("新增标签失败");
+        }
+    }
+
+    /**
+     * 更新标签
+     *
+     * @return
+     */
+    @PostMapping("/update")
+    public Result<Boolean> update(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("SubjectLabelController.update.dto: {}", subjectLabelDTO);
+        }
+        Preconditions.checkNotNull(subjectLabelDTO.getId(), "标签id不能为空");
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToLabelBO(subjectLabelDTO);
+        try {
+            Boolean result = subjectLabelDomainService.update(subjectLabelBO);
+            return Result.ok(result);
+        } catch (Exception e) {
+            log.error("SubjectLabelController.update.error:{}", e.getMessage(), e);
+            return Result.fail("更新标签失败");
+        }
+    }
+
+    /**
+     * 删除标签
+     * @param subjectLabelDTO
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public Result<Boolean> delete(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("SubjectLabelController.delete.dto: {}", subjectLabelDTO);
+        }
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToLabelBO(subjectLabelDTO);
+        try {
+            Boolean result = subjectLabelDomainService.delete(subjectLabelBO);
+            return Result.ok(result);
+        } catch (Exception e) {
+            log.error("SubjectLabelController.delete.error:{}", e.getMessage(), e);
+            return Result.fail("删除标签失败");
         }
     }
 

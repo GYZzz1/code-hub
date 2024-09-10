@@ -1,14 +1,14 @@
 package com.gyzjc.subject.infra.basic.service;
 
-import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
+import com.gyzjc.subject.infra.basic.entity.SubjectMapping;
 
 /**
- * 题目标签表(SubjectLabel)表服务接口
+ * 题目分类关系表(SubjectMapping)表服务接口
  *
  * @author makejava
- * @since 2024-08-11 21:34:07
+ * @since 2024-08-11 22:51:27
  */
-public interface SubjectLabelService {
+public interface SubjectMappingService {
 
     /**
      * 通过ID查询单条数据
@@ -16,23 +16,23 @@ public interface SubjectLabelService {
      * @param id 主键
      * @return 实例对象
      */
-    SubjectLabel queryById(Long id);
+    SubjectMapping queryById(Long id);
 
     /**
      * 新增数据
      *
-     * @param subjectLabel 实例对象
+     * @param subjectMapping 实例对象
      * @return 实例对象
      */
-    int insert(SubjectLabel subjectLabel);
+    SubjectMapping insert(SubjectMapping subjectMapping);
 
     /**
      * 修改数据
      *
-     * @param subjectLabel 实例对象
+     * @param subjectMapping 实例对象
      * @return 实例对象
      */
-    int update(SubjectLabel subjectLabel);
+    int update(SubjectMapping subjectMapping);
 
     /**
      * 通过主键删除数据

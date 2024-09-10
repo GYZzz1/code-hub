@@ -13,6 +13,20 @@ public interface SubjectLabelDomainService {
      */
     Boolean add(SubjectLabelBO subjectLabelBO);
 
+    /**
+     * 更新标签
+     * @param subjectLabelBO
+     * @return
+     */
+    Boolean update(SubjectLabelBO subjectLabelBO);
+
+    /**
+     * 删除标签
+     * @param subjectLabelBO
+     * @return
+     */
+    Boolean delete(SubjectLabelBO subjectLabelBO);
+
     // /**
     //  * 查询岗位大类
     //  * @return

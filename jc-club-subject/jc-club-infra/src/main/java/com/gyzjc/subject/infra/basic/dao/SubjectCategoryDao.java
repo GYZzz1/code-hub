@@ -1,4 +1,4 @@
-package com.gyzjc.subject.infra.basic.mapper;
+package com.gyzjc.subject.infra.basic.dao;
 
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import org.apache.ibatis.annotations.Param;

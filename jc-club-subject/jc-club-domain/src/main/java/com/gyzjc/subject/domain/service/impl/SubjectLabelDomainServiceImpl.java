@@ -1,5 +1,13 @@
 package com.gyzjc.subject.domain.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
+import com.gyzjc.subject.domain.convert.SubjectCategoryConverter;
+import com.gyzjc.subject.domain.convert.SubjectLabelConverter;
+import com.gyzjc.subject.domain.entity.SubjectLabelBO;
+import com.gyzjc.subject.domain.service.SubjectLabelDomainService;
+import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
+import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
 import com.gyzjc.subject.infra.basic.service.SubjectLabelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,11 +16,39 @@ import javax.annotation.Resource;
 
 @Service
 @Slf4j
-public class SubjectLabelDomainServiceImpl implements SubjectLabelService {
+public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService {
 
-    @Resource // TODO: 为什么AutoWired不行
-    private SubjectLabelService subjectCategoryService;
+    @Resource
+    private SubjectLabelService subjectLabelService;
 
+    @Override
+    public Boolean add(SubjectLabelBO subjectLabelBO) {
+        if (log.isInfoEnabled()) {
+            log.info("SubjectLabelDomainServiceImpl.add.bo:{}", JSON.toJSONString(subjectLabelBO));
+        }
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        subjectLabel.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        int count = subjectLabelService.insert(subjectLabel);
+        return count > 0;
+    }
+
+    @Override
+    public Boolean update(SubjectLabelBO subjectLabelBO) {
+        if (log.isInfoEnabled()) {
+            log.info("SubjectLabelDomainServiceImpl.update.bo:{}", JSON.toJSONString(subjectLabelBO));
+        }
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        int count = subjectLabelService.update(subjectLabel);
+        return count > 0;
+    }
+
+    @Override
+    public Boolean delete(SubjectLabelBO subjectLabelBO) {
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        subjectLabel.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
+        int count = subjectLabelService.update(subjectLabel);
+        return count > 0;
+    }
 
 
     // @Override

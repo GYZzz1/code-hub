@@ -8,6 +8,7 @@ import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.service.SubjectCategoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,13 +18,13 @@ import java.util.List;
 @Slf4j
 public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainService {
 
-    @Resource // TODO: 为什么AutoWired不行
+    @Autowired // TODO: 为什么AutoWired不行
     private SubjectCategoryService subjectCategoryService;
 
     @Override
     public void add(SubjectCategoryBO subjectCategoryBO) {
         if (log.isInfoEnabled()) {
-            log.info("SubjectCategoryController.add.bo:{}", JSON.toJSONString(subjectCategoryBO));
+            log.info("SubjectCategoryDomainServiceImpl.add.bo:{}", JSON.toJSONString(subjectCategoryBO));
         }
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
@@ -39,7 +40,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                 .convertBoToCategory(subjectCategoryList);
 
         if (log.isInfoEnabled()) {
-            log.info("SubjectCategoryController.queryPrimaryCategory.boList:{}",
+            log.info("SubjectCategoryDomainServiceImpl.queryPrimaryCategory.boList:{}",
                     JSON.toJSONString(boList));
         }
 
