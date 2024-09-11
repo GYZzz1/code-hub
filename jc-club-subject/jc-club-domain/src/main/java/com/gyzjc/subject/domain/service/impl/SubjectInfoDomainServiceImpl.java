@@ -14,18 +14,23 @@ import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
 import com.gyzjc.subject.domain.service.SubjectInfoDomainService;
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.entity.SubjectInfo;
+import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
 import com.gyzjc.subject.infra.basic.entity.SubjectMapping;
 import com.gyzjc.subject.infra.basic.service.SubjectCategoryService;
 import com.gyzjc.subject.infra.basic.service.SubjectInfoService;
+import com.gyzjc.subject.infra.basic.service.SubjectLabelService;
 import com.gyzjc.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,6 +40,8 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     private SubjectInfoService subjectInfoService;
     @Autowired
     private SubjectMappingService subjectMappingService;
+    @Autowired
+    private SubjectLabelService subjectLabelService;
     @Autowired
     private SubjectTypeHandlerFactory subjectTypeHandlerFactory;
 
@@ -97,16 +104,21 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Override
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
-        // SubjectInfo subjectInfo = subjectInfoService.queryById(subjectInfoBO.getId());
-        // Integer subjectType = subjectInfo.getSubjectType();
-        // SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
-        // SubjectOptionBO optionBO = handler.query(subjectInfo.getId().intValue());
-        // SubjectInfoBO bo = SubjectInfoConverter.INSTANCE.convertOptionAndInfoToBO(optionBO, subjectInfo);
-        // List<String> labelNameList = new ArrayList<>();
-        // bo.setLabelName(labelNameList);
-        //
-        // return bo;
-        return null;
+        SubjectInfo subjectInfo = subjectInfoService.queryById(subjectInfoBO.getId());
+        SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
+        SubjectOptionBO optionBO = handler.query(subjectInfo.getId().intValue());
+        SubjectInfoBO bo = SubjectInfoConverter.INSTANCE.convertOptionAndInfoToBO(optionBO, subjectInfo);
+
+        SubjectMapping subjectMapping = new SubjectMapping();
+        subjectMapping.setSubjectId(subjectInfo.getId());
+        subjectMapping.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        List<SubjectMapping> subjectMappingList = subjectMappingService.queryLabelId(subjectMapping);
+        List<Long> labelIds = subjectMappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        List<SubjectLabel> labelList = subjectLabelService.batchQueryById(labelIds);
+        List<String> labelNameList = CollectionUtils.isEmpty(labelList) ? null : labelList.stream().map(SubjectLabel::getLabelName).collect(Collectors.toList());
+        bo.setLabelName(labelNameList);
+
+        return bo;
     }
 
 }

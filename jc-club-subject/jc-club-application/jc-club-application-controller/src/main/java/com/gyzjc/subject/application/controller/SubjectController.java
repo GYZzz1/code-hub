@@ -64,6 +64,7 @@ public class SubjectController {
 
     /**
      * 查询题目列表
+     *
      * @param subjectInfoDTO
      * @return
      */
@@ -82,35 +83,35 @@ public class SubjectController {
             subjectInfoBO.setOptionList(subjectAnswerBOS);
             PageResult<SubjectInfoBO> result = subjectInfoDomainService.getSubjectPage(subjectInfoBO);
             return Result.ok(result);
-        }catch (Exception e) {
-            log.error("SubjectCategoryController.add.error:{}",e.getMessage(),e);
-            return Result.fail("add fail");
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.add.error:{}", e.getMessage(), e);
+            return Result.fail("分页查询题目失败");
         }
 
     }
 
     /**
      * 查询题目信息
+     *
      * @param subjectInfoDTO
      * @return
      */
     @PostMapping("/querySubjectInfo")
     public Result<SubjectInfoDTO> querySubjectInfo(@RequestBody SubjectInfoDTO subjectInfoDTO) {
-        return Result.fail("尚未开发");
-        // try {
-        //
-        //     Preconditions.checkNotNull(subjectInfoDTO.getId(), "题目id不能为空");
-        //     Preconditions.checkNotNull(subjectInfoDTO.getCategoryId(), "题目分类不能为空");
-        //     Preconditions.checkNotNull(subjectInfoDTO.getLabelId(), "题目标签不能为空");
-        //
-        //     SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBO(subjectInfoDTO);
-        //     SubjectInfoBO boResult = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
-        //     SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBOToDto(boResult);
-        //     return Result.ok(dto);
-        // }catch (Exception e) {
-        //     log.error("SubjectCategoryController.add.error:{}",e.getMessage(),e);
-        //     return Result.fail("add fail");
-        // }
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectController.querySubjectInfo.dto:{}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Preconditions.checkNotNull(subjectInfoDTO.getId(), "题目id不能为空");
+
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBO(subjectInfoDTO);
+            SubjectInfoBO boResult = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
+            SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBOToDto(boResult);
+            return Result.ok(dto);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.querySubjectInfo.error:{}", e.getMessage(), e);
+            return Result.fail("查询题目详情失败");
+        }
 
     }
 }

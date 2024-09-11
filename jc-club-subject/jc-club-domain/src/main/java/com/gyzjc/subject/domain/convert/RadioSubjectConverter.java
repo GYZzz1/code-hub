@@ -5,6 +5,7 @@ import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.entity.SubjectInfo;
+import com.gyzjc.subject.infra.basic.entity.SubjectMultiple;
 import com.gyzjc.subject.infra.basic.entity.SubjectRadio;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,4 +17,7 @@ public interface RadioSubjectConverter {
     RadioSubjectConverter INSTANCE = Mappers.getMapper(RadioSubjectConverter.class);
 
     SubjectRadio convertBoToEntity(SubjectAnswerBO subjectAnswerBO);
+
+    List<SubjectAnswerBO> convertEntityToAnswerBOList(List<SubjectRadio> subjectRadios);
+
 }

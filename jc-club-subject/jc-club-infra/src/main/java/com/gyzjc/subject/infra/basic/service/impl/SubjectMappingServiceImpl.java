@@ -65,7 +65,7 @@ public class SubjectMappingServiceImpl implements SubjectMappingService {
     }
 
     @Override
-    public List<SubjectMapping> queryByLabelId(SubjectMapping subjectMapping) {
+    public List<SubjectMapping> queryLabelId(SubjectMapping subjectMapping) {
         return this.subjectMappingDao.queryDistinctLabelId(subjectMapping);
     }
 

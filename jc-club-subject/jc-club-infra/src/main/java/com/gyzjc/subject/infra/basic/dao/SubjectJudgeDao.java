@@ -24,7 +24,6 @@ public interface SubjectJudgeDao {
      * 查询指定行数据
      *
      * @param subjectJudge 查询条件
-     * @param pageable         分页对象
      * @return 对象列表
      */
     List<SubjectJudge> queryAllByLimit(SubjectJudge subjectJudge);

@@ -138,13 +138,18 @@
     <select id="countByCondition" resultType="java.lang.Integer">
         select count(1)
         from subject_info a,
-             subject_mapping b
-        where a.subject_difficult = #{subjectInfo.subjectDifficult}
-          and b.category_id = #{categoryId}
-          and b.label_id = #{labelId}
-          and a.is_deleted = 0
-          and b.is_deleted = 0
-
+        subject_mapping b
+        where a.id = b.subject_id
+        <if test="subjectInfo.subjectDifficult != null">
+            and a.subject_difficult = #{subjectInfo.subjectDifficult}
+        </if>
+        <if test="subjectInfo.subjectType!= null">
+            and a.subject_type = #{subjectInfo.subjectType}
+        </if>
+        and b.category_id = #{categoryId}
+        and b.label_id = #{labelId}
+        and a.is_deleted = 0
+        and b.is_deleted = 0
     </select>
 
     <select id="queryPage" resultMap="SubjectInfoMap">
@@ -162,7 +167,7 @@
         <if test="subjectInfo.subjectType!= null">
             and a.subject_type = #{subjectInfo.subjectType}
         </if>
-        limit #{start},#{pageSize}
+        limit #{start}, #{pageSize}
     </select>
 
     <!--新增所有列-->

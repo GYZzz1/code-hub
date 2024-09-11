@@ -2,9 +2,12 @@ package com.gyzjc.subject.domain.handler.subject;
 
 import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.subject.common.enums.SubjectInfoTypeEnum;
+import com.gyzjc.subject.domain.convert.JudgeSubjectConverter;
 import com.gyzjc.subject.domain.convert.MutipleSubjectConverter;
+import com.gyzjc.subject.domain.entity.SubjectAnswerBO;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
 import com.gyzjc.subject.domain.entity.SubjectOptionBO;
+import com.gyzjc.subject.infra.basic.entity.SubjectJudge;
 import com.gyzjc.subject.infra.basic.entity.SubjectMultiple;
 import com.gyzjc.subject.infra.basic.service.SubjectMultipleService;
 import org.springframework.stereotype.Component;
@@ -44,6 +47,12 @@ public class MultipleTypeHandler implements SubjectTypeHandler {
 
     @Override
     public SubjectOptionBO query(int subjectId) {
-        return null;
+        SubjectMultiple subjectMultiple = new SubjectMultiple();
+        subjectMultiple.setSubjectId(Long.valueOf(subjectId));
+        List<SubjectMultiple> result = subjectMultipleService.queryByCondition(subjectMultiple);
+        List<SubjectAnswerBO> subjectAnswerBOList = MutipleSubjectConverter.INSTANCE.convertEntityToAnswerBOList(result);
+        SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
+        subjectOptionBO.setOptionList(subjectAnswerBOList);
+        return subjectOptionBO;
     }
 }

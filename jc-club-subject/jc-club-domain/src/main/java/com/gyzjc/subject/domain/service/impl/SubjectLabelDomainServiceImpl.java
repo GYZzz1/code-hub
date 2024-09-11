@@ -63,7 +63,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
         SubjectMapping subjectMapping = new SubjectMapping();
         subjectMapping.setCategoryId(categoryId);
         subjectMapping.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
-        List<SubjectMapping> mappingList = subjectMappingService.queryByLabelId(subjectMapping);
+        List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(subjectMapping);
         if (CollectionUtils.isEmpty(mappingList)) {
             return Collections.emptyList();
         }

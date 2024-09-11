@@ -2,6 +2,7 @@ package com.gyzjc.subject.domain.handler.subject;
 
 import com.gyzjc.subject.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.subject.common.enums.SubjectInfoTypeEnum;
+import com.gyzjc.subject.domain.convert.JudgeSubjectConverter;
 import com.gyzjc.subject.domain.convert.MutipleSubjectConverter;
 import com.gyzjc.subject.domain.entity.SubjectAnswerBO;
 import com.gyzjc.subject.domain.entity.SubjectInfoBO;
@@ -42,6 +43,12 @@ public class JudgeTypeHandler implements SubjectTypeHandler {
 
     @Override
     public SubjectOptionBO query(int subjectId) {
-        return null;
+        SubjectJudge subjectJudge = new SubjectJudge();
+        subjectJudge.setSubjectId(Long.valueOf(subjectId));
+        List<SubjectJudge> result = subjectJudgeService.queryByCondition(subjectJudge);
+        List<SubjectAnswerBO> subjectAnswerBOList = JudgeSubjectConverter.INSTANCE.convertEntityToAnswerBOList(result);
+        SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
+        subjectOptionBO.setOptionList(subjectAnswerBOList);
+        return subjectOptionBO;
     }
 }

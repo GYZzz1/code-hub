@@ -49,7 +49,7 @@ public interface SubjectMappingService {
      * @param subjectMapping
      * @return
      */
-    List<SubjectMapping> queryByLabelId(SubjectMapping subjectMapping);
+    List<SubjectMapping> queryLabelId(SubjectMapping subjectMapping);
 
     /**
      * 批量插入
