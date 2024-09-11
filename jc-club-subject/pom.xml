@@ -7,7 +7,7 @@
     <artifactId>jc-club-subject</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <description>鸡翅club-题目领域服务</description>
+    <description>CodeHub-题目领域服务</description>
     <modules>
         <module>jc-club-subject-api</module>
         <module>jc-club-application</module>
