@@ -5,3 +5,7 @@ minio:
   url: http://117.72.93.85:9000
   accessKey: minioadmin
   secretKey: minioadmin
+
+storage:
+  service:
+    type: minio
