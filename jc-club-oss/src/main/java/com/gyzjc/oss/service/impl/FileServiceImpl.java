@@ -3,7 +3,6 @@ package com.gyzjc.oss.service.impl;
 import com.gyzjc.oss.adapter.StorageAdapter;
 import com.gyzjc.oss.entity.FileInfo;
 import com.gyzjc.oss.service.FileService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,10 +20,9 @@ public class FileServiceImpl implements FileService {
 
     private final StorageAdapter storageAdapter;
 
-    public FileServiceImpl(@Qualifier("storageAdapter") StorageAdapter storageAdapter) {
+    public FileServiceImpl(StorageAdapter storageAdapter) {
         this.storageAdapter = storageAdapter;
     }
-
 
     @Override
     public void createBucket(String bucket) {

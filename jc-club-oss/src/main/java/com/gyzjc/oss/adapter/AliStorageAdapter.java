@@ -28,7 +28,7 @@ public class AliStorageAdapter implements StorageAdapter {
     @Override
     public List<String> getAllBuckets() {
         List<String> bucketNameList = new ArrayList<>();
-        bucketNameList.add("aliyun");
+        bucketNameList.add("aliyunxx");
         return bucketNameList;
     }
 

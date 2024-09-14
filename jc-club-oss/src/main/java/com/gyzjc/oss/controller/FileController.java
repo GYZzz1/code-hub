@@ -1,10 +1,11 @@
 package com.gyzjc.oss.controller;
 
 import com.gyzjc.oss.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName : FileController
@@ -15,12 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FileController {
 
-    @Autowired
+    @Resource
     private FileService fileService;
 
+    @Value("${storage.service.type}")
+    private String storageType;
+
     @GetMapping("/test")
-    public String testGetAllBuckets() {
-        return CollectionUtils.isEmpty(fileService.getAllBuckets() ) ? "null" : fileService.getAllBuckets().get(0);
+    public String test() {
+        return storageType;
+    }
+
+    @GetMapping("/testBean")
+    public String testBean() {
+        return fileService.getAllBuckets().get(0);
     }
 
 }
