@@ -38,10 +38,17 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     public Boolean update(AuthUserBO authUserBO) {
         AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
-        authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
-        authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+         Integer count = authUserService.update(authUser);
+        // TODO 有任何更新，与缓存同步
+        return count > 0;
+    }
+
+    @Override
+    public Boolean delete(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
+        authUser.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
         Integer count = authUserService.update(authUser);
-        // 有任何更新，与缓存同步
+        // TODO 有任何更新，与缓存同步
         return count > 0;
     }
 }

@@ -87,6 +87,48 @@ public class UserController {
         Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getPassword()), "用户密码不能为空");
     }
 
+    /**
+     * 删除用户
+     * @param authUserDTO
+     * @return
+     */
+    @RequestMapping ("/delete")
+    public Result<Boolean> delete(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("UserController.delete.dto:{}", JSON.toJSONString(authUserDTO));
+            }
+            Preconditions.checkNotNull(authUserDTO.getId());
+            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            return Result.ok(authUserDomainService.delete(authUserBO));
+        } catch (Exception e) {
+            log.error("UserController.delete.error:{}", e.getMessage(), e);
+            return Result.fail("删除用户信息失败");
+        }
+    }
+
+    /**
+     * 用户状态设置
+     * @param authUserDTO
+     * @return
+     */
+    @RequestMapping ("/changeStatus")
+    public Result<Boolean> changeStatus(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("UserController.changeStatus.dto:{}", JSON.toJSONString(authUserDTO));
+            }
+            Preconditions.checkNotNull(authUserDTO.getId(), "用户id不能为空");
+            Preconditions.checkNotNull(authUserDTO.getStatus(), "用户状态不能为空");
+
+            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            return Result.ok(authUserDomainService.update(authUserBO));
+        } catch (Exception e) {
+            log.error("UserController.changeStatus.error:{}", e.getMessage(), e);
+            return Result.fail("设置用户状态失败");
+        }
+    }
+
     @GetMapping("/doLogin")
     public SaResult doLogin(String userName, String password) {
         if ("zhang".equals(userName) && "123456".equals(password)) {

@@ -10,8 +10,8 @@ import lombok.Getter;
  */
 @Getter
 public enum AuthUserStatusEnum {
-    OPEN(1, "启用"),
-    CLOSE(0, "禁用");
+    OPEN(0, "启用"),
+    CLOSE(1, "禁用");
 
     private int code;
     private String desc;
