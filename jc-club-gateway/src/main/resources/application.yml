@@ -11,3 +11,15 @@ spring:
             - Path=/oss/**
           filters:
             - StripPrefix=1
+        - id: auth
+          uri: lb://jc-club-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        - id: subject
+          uri: lb://jc-club-subject
+          predicates:
+            - Path=/subject/**
+          filters:
+            - StripPrefix=1
