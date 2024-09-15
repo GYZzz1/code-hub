@@ -3,9 +3,21 @@ package com.gyzjc.auth.application.controller;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Preconditions;
+import com.gyzjc.auth.application.convert.AuthDTOUserConverter;
+import com.gyzjc.auth.application.dto.AuthUserDTO;
+import com.gyzjc.auth.common.entity.Result;
+import com.gyzjc.auth.domain.entity.AuthUserBO;
+import com.gyzjc.auth.domain.service.AuthUserDomainService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName : UserController
@@ -15,7 +27,36 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
+
+    @Resource
+    private AuthUserDomainService authUserDomainService;
+
+    /**
+     * 用户注册
+     * @param authUserDTO
+     * @return
+     */
+    @RequestMapping ("/register")
+    public Result<Boolean> register(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("UserController.register.dto:{}", JSON.toJSONString(authUserDTO));
+            }
+
+            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getUserName()), "用户名不能为空");
+            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getEmail()), "用户邮箱不能为空");
+            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getPassword()), "用户密码不能为空");
+
+            AuthUserBO subjectCategoryBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            authUserDomainService.register(subjectCategoryBO);
+            return Result.ok(true);
+        } catch (Exception e) {
+            log.error("UserController.register.error:{}", e.getMessage(), e);
+            return Result.fail("注册用户失败");
+        }
+    }
 
     @GetMapping("/doLogin")
     public SaResult doLogin(String userName, String password) {
