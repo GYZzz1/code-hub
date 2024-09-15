@@ -45,17 +45,46 @@ public class UserController {
                 log.info("UserController.register.dto:{}", JSON.toJSONString(authUserDTO));
             }
 
-            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getUserName()), "用户名不能为空");
-            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getEmail()), "用户邮箱不能为空");
-            Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getPassword()), "用户密码不能为空");
+            checkUserInfo(authUserDTO);
 
-            AuthUserBO subjectCategoryBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
-            authUserDomainService.register(subjectCategoryBO);
-            return Result.ok(true);
+            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            return Result.ok(authUserDomainService.register(authUserBO));
         } catch (Exception e) {
             log.error("UserController.register.error:{}", e.getMessage(), e);
             return Result.fail("注册用户失败");
         }
+    }
+
+
+    /**
+     * 修改用户信息
+     * @param authUserDTO
+     * @return
+     */
+    @RequestMapping ("/update")
+    public Result<Boolean> update(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("UserController.update.dto:{}", JSON.toJSONString(authUserDTO));
+            }
+            checkUserInfo(authUserDTO);
+            Preconditions.checkNotNull(authUserDTO.getId());
+            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            return Result.ok(authUserDomainService.update(authUserBO));
+        } catch (Exception e) {
+            log.error("UserController.update.error:{}", e.getMessage(), e);
+            return Result.fail("更新用户信息失败");
+        }
+    }
+
+    /**
+     * 校验入参
+     * @param authUserDTO
+     */
+    private void checkUserInfo(AuthUserDTO authUserDTO) {
+        Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getUserName()), "用户名不能为空");
+        Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getEmail()), "用户邮箱不能为空");
+        Preconditions.checkArgument(!StringUtils.isBlank(authUserDTO.getPassword()), "用户密码不能为空");
     }
 
     @GetMapping("/doLogin")

@@ -40,7 +40,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         }
 
         Result result = Result.fail(code, message);
-        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON); // TODO debug看看长什么样
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory dataBufferFactory = response.bufferFactory();
             byte[] bytes = null;

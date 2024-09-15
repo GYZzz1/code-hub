@@ -15,4 +15,12 @@ public interface AuthUserDomainService {
      * @return
      */
     Boolean register(AuthUserBO subjectCategoryBO);
+
+    /**
+     * 更新用户信息
+     *
+     * @param authUserBO
+     * @return
+     */
+    Boolean update(AuthUserBO authUserBO);
 }
