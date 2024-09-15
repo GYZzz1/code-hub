@@ -1,5 +1,6 @@
 package com.gyzjc.subject.infra.basic.service;
 
+import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
 
 import java.util.List;
@@ -50,4 +51,6 @@ public interface SubjectLabelService {
      * @return
      */
     List<SubjectLabel> batchQueryById(List<Long> labelIdList);
+
+    List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel);
 }

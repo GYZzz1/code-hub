@@ -21,6 +21,13 @@ public interface SubjectLabelDao {
     SubjectLabel queryById(Long id);
 
     /**
+     * 查询指定行数据
+     * @param subjectLabel
+     * @return
+     */
+    List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel);
+
+    /**
      * 统计总行数
      *
      * @param subjectLabel 查询条件

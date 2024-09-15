@@ -35,7 +35,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     public List<SubjectCategoryBO> queryCategory(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
-        List<SubjectCategory> subjectCategoryList =  subjectCategoryService.queryCategory(subjectCategory);
+        List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE
                 .convertBoToCategory(subjectCategoryList);
 
