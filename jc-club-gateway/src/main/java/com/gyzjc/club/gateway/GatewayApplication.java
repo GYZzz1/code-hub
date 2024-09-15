@@ -1,21 +1,19 @@
-package com.gyzjc.auth;
+package com.gyzjc.club.gateway;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * 权限微服务启动类
+ * 网关启动类
  *
  * @author gyz
- * @since 2024/06/15
+ * @since 2024/09/13
  */
 @SpringBootApplication
 @ComponentScan("com.gyzjc")
-@MapperScan("com.gyzjc.**.dao")
-public class AuthApplication {
+public class GatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AuthApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
 }
