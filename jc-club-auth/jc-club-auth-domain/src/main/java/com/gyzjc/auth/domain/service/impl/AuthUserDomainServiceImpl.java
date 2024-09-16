@@ -1,5 +1,6 @@
 package com.gyzjc.auth.domain.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import com.gyzjc.auth.common.enums.AuthUserStatusEnum;
 import com.gyzjc.auth.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.auth.domain.convert.AuthUserBOConvertor;
@@ -25,6 +26,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     public Boolean register(AuthUserBO authUserBO) {
         AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
+        authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), "codehub"));
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         Integer count = authUserService.insert(authUser);
