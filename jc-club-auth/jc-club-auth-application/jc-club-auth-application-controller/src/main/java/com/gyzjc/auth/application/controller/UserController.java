@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName : UserController
- * @Description : satoken测试
+ * @Description : 用户controller
  * @Author : GYZzz
  * @Date: 2024-09-15 11:22
  */
