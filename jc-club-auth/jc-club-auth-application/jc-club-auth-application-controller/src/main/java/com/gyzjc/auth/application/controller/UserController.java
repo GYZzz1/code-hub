@@ -5,7 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
-import com.gyzjc.auth.application.convert.AuthDTOUserConverter;
+import com.gyzjc.auth.application.convert.AuthUserDTOConverter;
 import com.gyzjc.auth.application.dto.AuthUserDTO;
 import com.gyzjc.auth.common.entity.Result;
 import com.gyzjc.auth.domain.entity.AuthUserBO;
@@ -47,7 +47,7 @@ public class UserController {
 
             checkUserInfo(authUserDTO);
 
-            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDtoToBO(authUserDTO);
             return Result.ok(authUserDomainService.register(authUserBO));
         } catch (Exception e) {
             log.error("UserController.register.error:{}", e.getMessage(), e);
@@ -68,8 +68,8 @@ public class UserController {
                 log.info("UserController.update.dto:{}", JSON.toJSONString(authUserDTO));
             }
             checkUserInfo(authUserDTO);
-            Preconditions.checkNotNull(authUserDTO.getId());
-            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            Preconditions.checkNotNull(authUserDTO.getId(), "用户id不能为空");
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDtoToBO(authUserDTO);
             return Result.ok(authUserDomainService.update(authUserBO));
         } catch (Exception e) {
             log.error("UserController.update.error:{}", e.getMessage(), e);
@@ -98,8 +98,8 @@ public class UserController {
             if (log.isInfoEnabled()) {
                 log.info("UserController.delete.dto:{}", JSON.toJSONString(authUserDTO));
             }
-            Preconditions.checkNotNull(authUserDTO.getId());
-            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            Preconditions.checkNotNull(authUserDTO.getId(), "用户id不能为空");
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDtoToBO(authUserDTO);
             return Result.ok(authUserDomainService.delete(authUserBO));
         } catch (Exception e) {
             log.error("UserController.delete.error:{}", e.getMessage(), e);
@@ -121,7 +121,7 @@ public class UserController {
             Preconditions.checkNotNull(authUserDTO.getId(), "用户id不能为空");
             Preconditions.checkNotNull(authUserDTO.getStatus(), "用户状态不能为空");
 
-            AuthUserBO authUserBO = AuthDTOUserConverter.INSTANCE.convertDtoToBO(authUserDTO);
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDtoToBO(authUserDTO);
             return Result.ok(authUserDomainService.update(authUserBO));
         } catch (Exception e) {
             log.error("UserController.changeStatus.error:{}", e.getMessage(), e);
