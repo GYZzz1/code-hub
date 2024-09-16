@@ -1,16 +1,16 @@
 package com.gyzjc.auth.infra.basic.service;
 
-import com.gyzjc.auth.infra.basic.entity.AuthRole;
+import com.gyzjc.auth.infra.basic.entity.AuthUserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 /**
- * 角色表(AuthRole)表服务接口
+ * 用户角色关系表(AuthUserRole)表服务接口
  *
  * @author makejava
- * @since 2024-09-16 22:34:09
+ * @since 2024-09-16 23:19:47
  */
-public interface AuthRoleService {
+public interface AuthUserRoleService {
 
     /**
      * 通过ID查询单条数据
@@ -18,23 +18,23 @@ public interface AuthRoleService {
      * @param id 主键
      * @return 实例对象
      */
-    AuthRole queryById(Long id);
+    AuthUserRole queryById(Long id);
 
     /**
      * 新增数据
      *
-     * @param authRole 实例对象
+     * @param authUserRole 实例对象
      * @return 实例对象
      */
-    int insert(AuthRole authRole);
+    AuthUserRole insert(AuthUserRole authUserRole);
 
     /**
      * 修改数据
      *
-     * @param authRole 实例对象
+     * @param authUserRole 实例对象
      * @return 实例对象
      */
-    int update(AuthRole authRole);
+    AuthUserRole update(AuthUserRole authUserRole);
 
     /**
      * 通过主键删除数据
@@ -44,10 +44,4 @@ public interface AuthRoleService {
      */
     boolean deleteById(Long id);
 
-    /**
-     * 根据条件查询角色
-     * @param authRole
-     * @return
-     */
-    AuthRole queryByCondition(AuthRole authRole);
 }

@@ -172,6 +172,9 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
         insert into auth_user(user_name,
                               nick_name,
                               email,
