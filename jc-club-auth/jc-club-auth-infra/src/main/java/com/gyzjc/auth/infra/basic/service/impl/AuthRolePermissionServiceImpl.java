@@ -1,5 +1,6 @@
 package com.gyzjc.auth.infra.basic.service.impl;
 
+import com.gyzjc.auth.infra.basic.entity.AuthRole;
 import com.gyzjc.auth.infra.basic.entity.AuthRolePermission;
 import com.gyzjc.auth.infra.basic.dao.AuthRolePermissionDao;
 import com.gyzjc.auth.infra.basic.service.AuthRolePermissionService;
@@ -71,4 +72,10 @@ public class AuthRolePermissionServiceImpl implements AuthRolePermissionService 
     public boolean deleteById(Long id) {
         return this.authRolePermissionDao.deleteById(id) > 0;
     }
+
+    @Override
+    public List<AuthRolePermission> queryByCondition(AuthRolePermission authRolePermission) {
+        return this.authRolePermissionDao.queryAllByLimit(authRolePermission);
+    }
+
 }

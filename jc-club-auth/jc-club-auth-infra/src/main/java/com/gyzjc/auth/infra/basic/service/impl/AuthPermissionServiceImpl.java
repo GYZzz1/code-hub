@@ -3,12 +3,14 @@ package com.gyzjc.auth.infra.basic.service.impl;
 import com.gyzjc.auth.infra.basic.entity.AuthPermission;
 import com.gyzjc.auth.infra.basic.dao.AuthPermissionDao;
 import com.gyzjc.auth.infra.basic.service.AuthPermissionService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 权限表(AuthPermission)表服务实现类
@@ -63,5 +65,15 @@ public class AuthPermissionServiceImpl implements AuthPermissionService {
     @Override
     public boolean deleteById(Long id) {
         return this.authPermissionDao.deleteById(id) > 0;
+    }
+
+    /**
+     * 根据roleIdList批量查询
+     * @param roleIdList
+     * @return
+     */
+    @Override
+    public List<AuthPermission> queryByRoleList(@Param("list") List<Long> roleIdList) {
+        return this.authPermissionDao.queryByRoleList(roleIdList);
     }
 }

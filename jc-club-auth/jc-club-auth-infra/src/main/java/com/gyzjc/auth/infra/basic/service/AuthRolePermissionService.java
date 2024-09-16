@@ -1,5 +1,6 @@
 package com.gyzjc.auth.infra.basic.service;
 
+import com.gyzjc.auth.infra.basic.entity.AuthRole;
 import com.gyzjc.auth.infra.basic.entity.AuthRolePermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,5 +54,12 @@ public interface AuthRolePermissionService {
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
+    /**
+     * 条件查询
+     * @param authRolePermission
+     * @return
+     */
+    List<AuthRolePermission> queryByCondition(AuthRolePermission authRolePermission);
 
 }

@@ -79,5 +79,11 @@ public interface AuthRoleDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 根据roleIdList批量查询
+     * @param roleIdList
+     * @return
+     */
+    List<AuthRole> queryByRoleList(@Param("list") List<Long> roleIdList);
 }
 

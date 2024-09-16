@@ -4,6 +4,8 @@ import com.gyzjc.auth.infra.basic.entity.AuthRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * 角色表(AuthRole)表服务接口
  *
@@ -50,4 +52,11 @@ public interface AuthRoleService {
      * @return
      */
     AuthRole queryByCondition(AuthRole authRole);
+
+    /**
+     * 根据roleIdList批量查询
+     * @param roleIdList
+     * @return
+     */
+    List<AuthRole> queryByRoleList(List<Long> roleIdList);
 }

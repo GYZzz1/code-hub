@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 角色表(AuthRole)表服务实现类
@@ -65,8 +66,23 @@ public class AuthRoleServiceImpl implements AuthRoleService {
         return this.authRoleDao.deleteById(id) > 0;
     }
 
+    /**
+     * 条件查询
+     * @param authRole
+     * @return
+     */
     @Override
     public AuthRole queryByCondition(AuthRole authRole) {
         return this.authRoleDao.queryAllByLimit(authRole);
+    }
+
+    /**
+     * 根据roleIdList批量查询
+     * @param roleIdList
+     * @return
+     */
+    @Override
+    public List<AuthRole> queryByRoleList(List<Long> roleIdList) {
+        return this.authRoleDao.queryByRoleList(roleIdList);
     }
 }

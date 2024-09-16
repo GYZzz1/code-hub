@@ -8,4 +8,6 @@ package com.gyzjc.auth.domain.constants;
  */
 public class AuthConstant {
     public static final String NORMAL_USER = "normal_user";
+    public static final String AUTH_PERMISSION_PREFIX = "auth.permission";
+    public static final String AUTH_ROLE_PREFIX = "auth.role";
 }

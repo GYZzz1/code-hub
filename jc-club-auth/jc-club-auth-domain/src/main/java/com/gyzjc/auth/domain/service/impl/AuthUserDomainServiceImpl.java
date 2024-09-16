@@ -1,22 +1,23 @@
 package com.gyzjc.auth.domain.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import com.google.gson.Gson;
 import com.gyzjc.auth.common.enums.AuthUserStatusEnum;
 import com.gyzjc.auth.common.enums.IsDeletedFlagEnum;
 import com.gyzjc.auth.domain.constants.AuthConstant;
 import com.gyzjc.auth.domain.convert.AuthUserBOConvertor;
 import com.gyzjc.auth.domain.entity.AuthUserBO;
+import com.gyzjc.auth.domain.redis.RedisUtil;
 import com.gyzjc.auth.domain.service.AuthUserDomainService;
-import com.gyzjc.auth.infra.basic.entity.AuthRole;
-import com.gyzjc.auth.infra.basic.entity.AuthUser;
-import com.gyzjc.auth.infra.basic.entity.AuthUserRole;
-import com.gyzjc.auth.infra.basic.service.AuthRoleService;
-import com.gyzjc.auth.infra.basic.service.AuthUserRoleService;
-import com.gyzjc.auth.infra.basic.service.AuthUserService;
+import com.gyzjc.auth.infra.basic.entity.*;
+import com.gyzjc.auth.infra.basic.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName : AuthUserDomainServiceImpl
@@ -32,6 +33,12 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     private AuthUserRoleService authUserRoleService;
     @Resource
     private AuthRoleService authRoleService;
+    @Resource
+    private AuthPermissionService authPermissionService;
+    @Resource
+    private AuthRolePermissionService authRolePermissionService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -42,7 +49,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         Integer count = authUserService.insert(authUser);
 
-        // 建立一个初步的角色关联
+        // 建立一个初步的用户角色关联
         AuthRole authRole = new AuthRole();
         authRole.setRoleKey(AuthConstant.NORMAL_USER);
         AuthRole roleResult = authRoleService.queryByCondition(authRole);
@@ -56,7 +63,21 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
 
         authUserRoleService.insert(authUserRole);
 
-        // TODO 把当前用户角色和权限刷到redis里
+        // 把当前用户角色和权限刷到redis里
+        String roleKey = redisUtil.buildKey(AuthConstant.AUTH_ROLE_PREFIX, authUser.getUserName());
+        List<AuthRole> roleList = new ArrayList<>();
+        roleList.add(authRole);
+        redisUtil.set(roleKey, new Gson().toJson(roleList));
+
+        AuthRolePermission authRolePermission = new AuthRolePermission();
+        authRolePermission.setRoleId(roleId);
+        List<AuthRolePermission> rolePermissionList = authRolePermissionService.queryByCondition(authRolePermission);
+
+        List<Long> permissionIdList = rolePermissionList.stream().map(AuthRolePermission::getPermissionId).collect(Collectors.toList());
+        // 根据roleID查权限
+        List<AuthPermission> permissionList = authPermissionService.queryByRoleList(permissionIdList);
+        String permissionKey = redisUtil.buildKey(AuthConstant.AUTH_PERMISSION_PREFIX, authUser.getUserName());
+        redisUtil.set(permissionKey, new Gson().toJson(permissionList));
 
         return count > 0;
     }
