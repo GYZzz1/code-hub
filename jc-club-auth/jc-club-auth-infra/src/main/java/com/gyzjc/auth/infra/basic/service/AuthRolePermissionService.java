@@ -4,6 +4,8 @@ import com.gyzjc.auth.infra.basic.entity.AuthRolePermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * 角色权限关系表(AuthRolePermission)表服务接口
  *
@@ -27,6 +29,14 @@ public interface AuthRolePermissionService {
      * @return 实例对象
      */
     int insert(AuthRolePermission authRolePermission);
+
+    /**
+     * 批量新增数据
+     *
+     * @param authRolePermissionList 实例对象
+     * @return 实例对象
+     */
+    int insertBatch(List<AuthRolePermission> authRolePermissionList);
 
     /**
      * 修改数据

@@ -13,6 +13,8 @@ import com.gyzjc.auth.infra.basic.service.AuthRolePermissionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName : AuthRolePermissionDomainServiceImpl
@@ -27,15 +29,17 @@ public class AuthRolePermissionDomainServiceImpl implements AuthRolePermissionDo
 
     @Override
     public Boolean add(AuthRolePermissionBO authRolePermissionBO) {
+        List<AuthRolePermission> rolePermissions = new ArrayList<>();
         Long roleId = authRolePermissionBO.getRoleId();
         authRolePermissionBO.getPermissionIdList().forEach(permissionId -> {
             AuthRolePermission authRolePermission = new AuthRolePermission();
             authRolePermission.setRoleId(roleId);
             authRolePermission.setPermissionId(permissionId);
             authRolePermission.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
-            authRolePermissionService.insert(authRolePermission);
+            rolePermissions.add(authRolePermission);
         });
+        int count = authRolePermissionService.insertBatch(rolePermissions);
 
-        return true;
+        return count > 0;
     }
 }
