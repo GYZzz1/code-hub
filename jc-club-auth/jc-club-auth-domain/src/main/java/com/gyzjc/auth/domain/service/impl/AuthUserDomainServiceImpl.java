@@ -1,6 +1,8 @@
 package com.gyzjc.auth.domain.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.google.gson.Gson;
 import com.gyzjc.auth.common.enums.AuthUserStatusEnum;
 import com.gyzjc.auth.common.enums.IsDeletedFlagEnum;
@@ -11,6 +13,7 @@ import com.gyzjc.auth.domain.redis.RedisUtil;
 import com.gyzjc.auth.domain.service.AuthUserDomainService;
 import com.gyzjc.auth.infra.basic.entity.*;
 import com.gyzjc.auth.infra.basic.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +43,15 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private RedisUtil redisUtil;
 
+    private static final String LOGIN_PREFIX = "loginCode";
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean register(AuthUserBO authUserBO) {
         AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
-        authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), "codehub"));
+        if (StringUtils.isNotBlank(authUser.getPassword())) {
+            authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), "codehub"));
+        }
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         Integer count = authUserService.insert(authUser);
@@ -97,5 +104,23 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         Integer count = authUserService.update(authUser);
         // TODO 有任何更新，与缓存同步
         return count > 0;
+    }
+
+    @Override
+    @Transactional
+    public SaTokenInfo doLogin(String validateCode) {
+        String loginKey = redisUtil.buildKey(LOGIN_PREFIX, validateCode);
+        String openId = redisUtil.get(loginKey);
+
+        if (StringUtils.isBlank(openId)) {
+            return null;
+        }
+
+        AuthUserBO authUserBO = new AuthUserBO();
+        authUserBO.setUserName(openId);
+        this.register(authUserBO);
+
+        StpUtil.login(openId);
+        return StpUtil.getTokenInfo();
     }
 }

@@ -1,5 +1,6 @@
 package com.gyzjc.auth.domain.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import com.gyzjc.auth.domain.entity.AuthUserBO;
 
 /**
@@ -30,4 +31,11 @@ public interface AuthUserDomainService {
      * @return
      */
     Boolean delete(AuthUserBO authUserBO);
+
+    /**
+     * 用户登录
+     * @param validateCode
+     * @return
+     */
+    SaTokenInfo doLogin(String validateCode);
 }

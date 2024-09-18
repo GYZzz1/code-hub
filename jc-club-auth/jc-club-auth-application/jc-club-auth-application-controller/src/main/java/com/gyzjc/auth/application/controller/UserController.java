@@ -12,10 +12,7 @@ import com.gyzjc.auth.domain.entity.AuthUserBO;
 import com.gyzjc.auth.domain.service.AuthUserDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -130,13 +127,14 @@ public class UserController {
     }
 
     @GetMapping("/doLogin")
-    public SaResult doLogin(String userName, String password) {
-        if ("zhang".equals(userName) && "123456".equals(password)) {
-            StpUtil.login("彭欣怡");
-            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-            return SaResult.data(tokenInfo);
+    public Result<SaTokenInfo> doLogin(@RequestParam("validateCode") String validateCode) {
+        try {
+            Preconditions.checkArgument(StringUtils.isNotBlank(validateCode), "验证码不能为空");
+            return Result.ok(authUserDomainService.doLogin(validateCode));
+        } catch (Exception e) {
+            log.error("UserController.doLogin.error:{}", e.getMessage(), e);
+            return Result.fail("登录失败");
         }
-        return SaResult.error("登录失败");
     }
 
     @GetMapping("/isLogin")
