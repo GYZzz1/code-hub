@@ -4,9 +4,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 题目分类(SubjectCategory)实体类
+ * 题目分类DTO
  *
  * @author makejava
  * @since 2024-06-15 13:43:58
@@ -38,6 +39,10 @@ public class SubjectCategoryDTO implements Serializable {
      * 数量
      */
     private Integer count;
+    /**
+     * 标签信息
+     */
+    private List<SubjectLabelDTO> labelDTOList;
 
 }
 
