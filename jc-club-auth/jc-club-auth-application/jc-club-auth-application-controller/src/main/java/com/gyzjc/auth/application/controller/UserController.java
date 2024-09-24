@@ -101,7 +101,7 @@ public class UserController {
             return Result.ok(AuthUserDTOConverter.INSTANCE.convertBOToDTO(userInfo));
         } catch (Exception e) {
             log.error("UserController.getUserInfo.error:{}", e.getMessage(), e);
-            return Result.fail("更新用户信息失败");
+            return Result.fail("获取用户信息失败");
         }
     }
 
@@ -160,6 +160,24 @@ public class UserController {
         } catch (Exception e) {
             log.error("UserController.doLogin.error:{}", e.getMessage(), e);
             return Result.fail("登录失败");
+        }
+    }
+
+    /**
+     * 退出登录
+     * @param userName
+     * @return
+     */
+    @RequestMapping ("/logOut")
+    public Result<Void> logOut(@RequestParam String userName) {
+        try {
+            log.info("UserController.logOut.userName:{}", userName);
+            Preconditions.checkArgument(!StringUtils.isBlank(userName) , "用户名不能为空");
+            StpUtil.logout(userName);
+            return Result.ok();
+        } catch (Exception e) {
+            log.error("UserController.logOut.error:{}", e.getMessage(), e);
+            return Result.fail("退出登录失败");
         }
     }
 
