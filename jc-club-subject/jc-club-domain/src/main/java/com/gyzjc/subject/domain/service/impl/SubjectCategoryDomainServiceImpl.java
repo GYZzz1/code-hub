@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -102,9 +100,24 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                     JSON.toJSONString(subjectCategoryList));
         }
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryList);
+        Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
+        List<CompletableFuture<Map<Long, List<SubjectLabelBO>>>> completableFutureList = categoryBOList.stream().map(category ->
+                CompletableFuture.supplyAsync(() -> getLabelBOList(category), labelThreadPool)
+        ).collect(Collectors.toList());
+        completableFutureList.forEach(future -> {
+            Map<Long, List<SubjectLabelBO>> resultMap = null;
+            try {
+                resultMap = future.get();
+                map.putAll(resultMap);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        /*
         // 一次获取标签信息
         List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTaskList = new ArrayList<>();
-        Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
+
         categoryBOList.forEach(category -> {
             FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(() -> getLabelBOList(category));
             futureTaskList.add(futureTask);
@@ -116,7 +129,8 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                 continue;
             }
             map.putAll(resultMap);
-        }
+        }*/
+
         categoryBOList.forEach(categoryBO -> {
             categoryBO.setLabelBOList(map.get(categoryBO.getId()));
         });
