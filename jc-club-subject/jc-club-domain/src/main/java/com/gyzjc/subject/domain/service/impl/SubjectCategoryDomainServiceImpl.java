@@ -105,10 +105,11 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                 CompletableFuture.supplyAsync(() -> getLabelBOList(category), labelThreadPool)
         ).collect(Collectors.toList());
         completableFutureList.forEach(future -> {
-            Map<Long, List<SubjectLabelBO>> resultMap = null;
             try {
-                resultMap = future.get();
-                map.putAll(resultMap);
+                Map<Long, List<SubjectLabelBO>> resultMap = future.get();
+                if (!CollectionUtils.isEmpty(resultMap)) {
+                    map.putAll(resultMap);
+                }
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
