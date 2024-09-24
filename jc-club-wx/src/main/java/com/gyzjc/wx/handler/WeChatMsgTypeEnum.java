@@ -43,7 +43,7 @@ public enum WeChatMsgTypeEnum {
             String toUserName = msgMap.get("ToUserName");
 
             Random random = new Random();
-            int validateCode = random.nextInt(90000) + 10000;
+            int validateCode = random.nextInt(1000);
             String validateKey = redisUtil.buildKey(LOGIN_PREFIX, String.valueOf(validateCode));
             redisUtil.setNx(validateKey, fromUserName, 5L, TimeUnit.MINUTES);
 

@@ -48,6 +48,14 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean register(AuthUserBO authUserBO) {
+        // 校验用户是否存在
+        AuthUser exitsAuthUser = new AuthUser();
+        exitsAuthUser.setUserName(authUserBO.getUserName());
+        List<AuthUser> existUser = authUserService.queryByCondition(exitsAuthUser);
+        if (!existUser.isEmpty()) {
+            return true;
+        }
+
         AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
         if (StringUtils.isNotBlank(authUser.getPassword())) {
             authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), "codehub"));
@@ -92,7 +100,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     public Boolean update(AuthUserBO authUserBO) {
         AuthUser authUser = AuthUserBOConvertor.INSTANCE.convertBOToEntity(authUserBO);
-         Integer count = authUserService.update(authUser);
+        Integer count = authUserService.update(authUser);
         // TODO 有任何更新，与缓存同步
         return count > 0;
     }

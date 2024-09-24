@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 单选题目的策略类
@@ -55,6 +56,13 @@ public class RadioTypeHandler implements SubjectTypeHandler {
         List<SubjectAnswerBO> subjectAnswerBOList = RadioSubjectConverter.INSTANCE.convertEntityToAnswerBOList(result);
         SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
         subjectOptionBO.setOptionList(subjectAnswerBOList);
+        subjectOptionBO.setSubjectAnswer(subjectAnswerBOList.stream()
+                                                            .filter(subjectAnswerBO -> subjectAnswerBO.getIsCorrect() == 1)
+                                                            .collect(Collectors.toList())
+                                                            .stream().
+                                                            findFirst()
+                                                            .map(SubjectAnswerBO::getOptionContent)
+                                                            .orElse(null));
         return subjectOptionBO;
     }
 }

@@ -85,12 +85,13 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
         List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
         List<SubjectLabel> labelList = subjectLabelService.batchQueryById(labelIdList);
         List<SubjectLabelBO> boList = new ArrayList<>();
-        labelList.forEach(lablel -> {
+        labelList.forEach(label -> {
             SubjectLabelBO bo = new SubjectLabelBO();
-            bo.setCategoryId(lablel.getId());
-            bo.setLabelName(lablel.getLabelName());
+            bo.setId(label.getId());
+            bo.setCategoryId(label.getCategoryId());
+            bo.setLabelName(label.getLabelName());
             bo.setCategoryId(categoryId);
-            bo.setSortNum(lablel.getSortNum());
+            bo.setSortNum(label.getSortNum());
             boList.add(bo);
         });
         return boList;

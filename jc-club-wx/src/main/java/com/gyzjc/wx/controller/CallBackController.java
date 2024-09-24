@@ -1,6 +1,5 @@
-package com.gyzjc.wx.comtroller;
+package com.gyzjc.wx.controller;
 
-import com.gyzjc.wx.handler.WeChatMsgFactory;
 import com.gyzjc.wx.handler.WeChatMsgTypeEnum;
 import com.gyzjc.wx.redis.RedisUtil;
 import com.gyzjc.wx.utils.MessageUtil;

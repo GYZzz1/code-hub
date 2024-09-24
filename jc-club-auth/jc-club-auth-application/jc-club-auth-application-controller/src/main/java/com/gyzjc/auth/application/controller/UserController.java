@@ -127,7 +127,7 @@ public class UserController {
     }
 
     @GetMapping("/doLogin")
-    public Result<SaTokenInfo> doLogin(@RequestParam("validateCode") String validateCode) {
+    public Result<SaTokenInfo> doLogin(@RequestParam("validCode") String validateCode) {
         try {
             Preconditions.checkArgument(StringUtils.isNotBlank(validateCode), "验证码不能为空");
             return Result.ok(authUserDomainService.doLogin(validateCode));
