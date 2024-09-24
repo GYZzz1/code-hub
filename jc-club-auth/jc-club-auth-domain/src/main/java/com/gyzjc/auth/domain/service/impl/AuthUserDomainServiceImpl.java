@@ -16,6 +16,7 @@ import com.gyzjc.auth.infra.basic.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -130,5 +131,17 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
 
         StpUtil.login(openId);
         return StpUtil.getTokenInfo();
+    }
+
+    @Override
+    public AuthUserBO getUserInfo(AuthUserBO authUserBO) {
+        AuthUser authUser = new AuthUser();
+        authUser.setUserName(authUserBO.getUserName());
+        List<AuthUser> userList = authUserService.queryByCondition(authUser);
+        if (CollectionUtils.isEmpty(userList)) {
+            return new AuthUserBO();
+        }
+        AuthUser user = userList.get(0);
+        return AuthUserBOConvertor.INSTANCE.convertEntityToBO(user);
     }
 }

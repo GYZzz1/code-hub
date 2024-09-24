@@ -38,4 +38,6 @@ public interface AuthUserDomainService {
      * @return
      */
     SaTokenInfo doLogin(String validateCode);
+
+    AuthUserBO getUserInfo(AuthUserBO authUserBO);
 }
