@@ -51,4 +51,9 @@ public class AliStorageAdapter implements StorageAdapter {
     public void deleteObject(String bucket, String objectName) {
 
     }
+
+    @Override
+    public String getUrl(String bucketName, String objectName) {
+        return null;
+    }
 }

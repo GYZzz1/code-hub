@@ -30,13 +30,19 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void uploadFile(MultipartFile uploadFile, String bucket, String objectName) {
+    public String uploadFile(MultipartFile uploadFile, String bucket, String objectName) {
         storageAdapter.uploadFile(uploadFile, bucket, objectName);
+        return storageAdapter.getUrl(bucket, objectName);
     }
 
     @Override
     public List<String> getAllBuckets() {
         return storageAdapter.getAllBuckets();
+    }
+
+    @Override
+    public String getUrl(String bucketName, String objectName) {
+        return storageAdapter.getUrl(bucketName, objectName);
     }
 
     @Override

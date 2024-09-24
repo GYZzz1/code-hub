@@ -72,4 +72,11 @@ public interface StorageAdapter {
      */
     void deleteObject(String bucket, String objectName);
 
+    /**
+     * 获取url
+     * @param bucketName
+     * @param objectName
+     * @return
+     */
+    String getUrl(String bucketName, String objectName);
 }

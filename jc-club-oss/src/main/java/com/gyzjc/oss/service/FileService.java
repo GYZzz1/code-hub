@@ -30,7 +30,7 @@ public interface FileService {
      * @param objectName
      * @throws Exception
      */
-    void uploadFile(MultipartFile uploadFile, String bucket, String objectName);
+    String uploadFile(MultipartFile uploadFile, String bucket, String objectName);
 
     /**
      * 列出所有bucket桶
@@ -39,6 +39,8 @@ public interface FileService {
      * @throws Exception
      */
     List<String> getAllBuckets();
+
+    String getUrl(String bucketName, String objectName);
 
     /**
      * 列出当前bucket桶及文件

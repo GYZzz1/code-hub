@@ -1,9 +1,9 @@
 package com.gyzjc.oss.adapter;
 
 import com.gyzjc.oss.entity.FileInfo;
-import com.gyzjc.oss.adapter.StorageAdapter;
 import com.gyzjc.oss.util.MinioUtil;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -20,6 +20,9 @@ public class MinioStorageAdapter implements StorageAdapter {
 
     @Resource
     private MinioUtil minioUtil;
+
+    @Value("${minio.url}")
+    private String url;
 
     @Override
     @SneakyThrows
@@ -67,4 +70,11 @@ public class MinioStorageAdapter implements StorageAdapter {
     public void deleteObject(String bucket, String objectName) {
         minioUtil.deleteObject(bucket, objectName);
     }
+
+    @Override
+    @SneakyThrows
+    public String getUrl(String bucket, String objectName) {
+        return url + "/" + bucket + "/" + objectName;
+    }
+
 }
