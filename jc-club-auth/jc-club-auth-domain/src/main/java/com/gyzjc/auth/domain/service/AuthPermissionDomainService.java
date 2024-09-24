@@ -3,6 +3,8 @@ package com.gyzjc.auth.domain.service;
 import com.gyzjc.auth.domain.entity.AuthPermissionBO;
 import com.gyzjc.auth.domain.entity.AuthRoleBO;
 
+import java.util.List;
+
 /**
  * @ClassName : AuthPermissionDomainService
  * @Description : 权限领域service
@@ -31,4 +33,11 @@ public interface AuthPermissionDomainService {
      * @return
      */
     Boolean delete(AuthPermissionBO authPermissionBO);
+
+    /**
+     * 获取权限
+     * @param userName
+     * @return
+     */
+    List<String> getPermission(String userName);
 }
