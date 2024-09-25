@@ -6,6 +6,7 @@ import com.gyzjc.subject.domain.convert.SubjectCategoryConverter;
 import com.gyzjc.subject.domain.entity.SubjectCategoryBO;
 import com.gyzjc.subject.domain.entity.SubjectLabelBO;
 import com.gyzjc.subject.domain.service.SubjectCategoryDomainService;
+import com.gyzjc.subject.domain.util.CacheUtil;
 import com.gyzjc.subject.infra.basic.entity.SubjectCategory;
 import com.gyzjc.subject.infra.basic.entity.SubjectLabel;
 import com.gyzjc.subject.infra.basic.entity.SubjectMapping;
@@ -39,6 +40,8 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     private SubjectLabelService subjectLabelService;
     @Resource
     private ThreadPoolExecutor labelThreadPool;
+    @Resource
+    private CacheUtil cacheUtil;
 
     @Override
     public void add(SubjectCategoryBO subjectCategoryBO) {
@@ -89,9 +92,16 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     @Override
     @SneakyThrows
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
+        Long id = subjectCategoryBO.getId();
+        String cacheKey = "categoryAndLabel." + id;
+        return (List<SubjectCategoryBO>) cacheUtil.getResult(cacheKey,
+                SubjectCategoryBO.class, s -> getSubjectCategoryBOS(id));
+    }
+
+    private List<SubjectCategoryBO> getSubjectCategoryBOS(Long categoryId) {
         // 查询当前大分类下所有小分类
         SubjectCategory subjectCategory = new SubjectCategory();
-        subjectCategory.setParentId(subjectCategoryBO.getId());
+        subjectCategory.setParentId(categoryId);
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
 
